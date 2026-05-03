@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 
+// Lista solo servicios activos para mostrar al cliente.
 const getServicios = async (req, res) => {
   try {
     const [services] = await pool.query('SELECT * FROM servicios WHERE activo = TRUE ORDER BY nombre');
@@ -10,6 +11,7 @@ const getServicios = async (req, res) => {
   }
 };
 
+// Devuelve detalle de un servicio activo por id.
 const getServicioById = async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,12 +1,15 @@
+-- Crea la base de datos principal del backend.
 CREATE DATABASE IF NOT EXISTS CleanHomeDB;
 USE CleanHomeDB;
 
+-- Tabla de roles del sistema (Admin / Cliente).
 CREATE TABLE IF NOT EXISTS roles (
     id_rol INT AUTO_INCREMENT PRIMARY KEY,
     nombre_rol VARCHAR(30) NOT NULL UNIQUE,
     descripcion VARCHAR(100)
 ) ENGINE=InnoDB;
 
+-- Usuarios registrados: clientes y administradores.
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -19,6 +22,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
 ) ENGINE=InnoDB;
 
+-- Catalogo de servicios ofertados por la empresa.
 CREATE TABLE IF NOT EXISTS servicios (
     id_servicio INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -28,6 +32,7 @@ CREATE TABLE IF NOT EXISTS servicios (
     activo BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB;
 
+-- Personal de limpieza disponible para asignaciones.
 CREATE TABLE IF NOT EXISTS personal_limpieza (
     id_personal INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -35,6 +40,7 @@ CREATE TABLE IF NOT EXISTS personal_limpieza (
     disponible BOOLEAN DEFAULT TRUE
 ) ENGINE=InnoDB;
 
+-- Solicitudes de limpieza creadas por clientes.
 CREATE TABLE IF NOT EXISTS solicitudes (
     id_solicitud INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
@@ -50,11 +56,13 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     FOREIGN KEY (id_personal) REFERENCES personal_limpieza(id_personal)
 ) ENGINE=InnoDB;
 
+-- Semillas de roles base.
 INSERT INTO roles (nombre_rol, descripcion) VALUES
 ('Admin', 'Administrador del sistema'),
 ('Cliente', 'Usuario que solicita servicios')
 ON DUPLICATE KEY UPDATE descripcion = VALUES(descripcion);
 
+-- Semillas de servicios iniciales.
 INSERT INTO servicios (nombre, descripcion, duracion_estimada, precio, activo)
 SELECT 'Limpieza General', 'Servicio básico de limpieza para hogar u oficina', '2 a 4 horas', 40.00, TRUE
 WHERE NOT EXISTS (
@@ -73,6 +81,7 @@ WHERE NOT EXISTS (
     SELECT 1 FROM servicios WHERE nombre = 'Limpieza de Ventanas'
 );
 
+-- Semillas de personal de limpieza.
 INSERT INTO personal_limpieza (nombre, telefono, disponible)
 SELECT 'Ana Silva', '7000-0001', TRUE
 WHERE NOT EXISTS (
@@ -91,6 +100,7 @@ WHERE NOT EXISTS (
     SELECT 1 FROM personal_limpieza WHERE telefono = '7000-0003'
 );
 
+-- Usuario administrador por defecto (password: Admin123!).
 INSERT INTO usuarios (nombre, correo, telefono, direccion, password_hash, id_rol)
 SELECT
     'Administrador CleanHome',

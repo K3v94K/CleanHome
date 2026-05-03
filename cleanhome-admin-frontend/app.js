@@ -2,6 +2,8 @@
 const TOKEN_KEY = 'cleanhome_admin_token';
 const API_KEY = 'cleanhome_api_base';
 
+// Estados disponibles para actualizar solicitudes desde el panel.
+// TOKEN_KEY y API_KEY guardan sesion/configuracion en localStorage.
 const dom = {
   loginView: document.getElementById('loginView'),
   dashboardView: document.getElementById('dashboardView'),
@@ -28,6 +30,7 @@ const dom = {
   clearServicioBtn: document.getElementById('clearServicioBtn'),
 };
 
+// Estado global en memoria del frontend.
 const state = {
   token: localStorage.getItem(TOKEN_KEY) || '',
   baseApi: localStorage.getItem(API_KEY) || 'http://localhost:3000/api',
@@ -36,6 +39,7 @@ const state = {
   servicios: [],
 };
 
+// Muestra mensajes informativos, de exito o error en la barra inferior.
 function setStatus(message, type = 'info') {
   dom.statusLine.textContent = message;
   dom.statusLine.classList.remove('ok', 'error');
@@ -47,12 +51,14 @@ function setSessionInfo(text) {
   dom.sessionInfo.textContent = text;
 }
 
+// Alterna entre vista de login y vista de dashboard.
 function toggleView(isLogged) {
   dom.loginView.classList.toggle('hidden', isLogged);
   dom.dashboardView.classList.toggle('hidden', !isLogged);
   dom.logoutBtn.classList.toggle('hidden', !isLogged);
 }
 
+// Elimina "/" final para evitar URLs mal formadas al concatenar rutas.
 function normalizeBaseApi(url) {
   return url.trim().replace(/\/+$/, '');
 }
@@ -64,6 +70,7 @@ function formatDate(isoDate) {
   return date.toLocaleDateString('es-SV');
 }
 
+// Sanitiza texto para inyectarlo seguro en HTML.
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -73,6 +80,7 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+// Cliente HTTP basico para consumir la API backend.
 async function apiFetch(path, options = {}, useAuth = true) {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (useAuth && state.token) {
@@ -99,6 +107,7 @@ async function apiFetch(path, options = {}, useAuth = true) {
   return payload;
 }
 
+// Construye tabla de solicitudes en pantalla.
 function renderSolicitudes() {
   if (!state.solicitudes.length) {
     dom.solicitudesBody.innerHTML = '<tr><td colspan="8">No hay solicitudes registradas.</td></tr>';
@@ -153,6 +162,7 @@ function renderSolicitudes() {
   });
 }
 
+// Construye tabla de servicios en pantalla.
 function renderServicios() {
   if (!state.servicios.length) {
     dom.serviciosBody.innerHTML = '<tr><td colspan="5">No hay servicios.</td></tr>';
@@ -177,6 +187,7 @@ function renderServicios() {
     .join('');
 }
 
+// Carga solicitudes y personal de limpieza para acciones de asignacion.
 async function loadSolicitudes() {
   const solicitudesResp = await apiFetch('/admin/solicitudes');
   state.solicitudes = solicitudesResp.solicitudes || [];
@@ -192,16 +203,19 @@ async function loadSolicitudes() {
   renderSolicitudes();
 }
 
+// Carga catalogo de servicios para administracion.
 async function loadServicios() {
   const serviciosResp = await apiFetch('/admin/servicios');
   state.servicios = serviciosResp.servicios || [];
   renderServicios();
 }
 
+// Carga inicial de datos del dashboard (solicitudes + servicios).
 async function loadDashboard() {
   await Promise.all([loadSolicitudes(), loadServicios()]);
 }
 
+// Limpia formulario de servicio para crear uno nuevo.
 function resetServicioForm() {
   dom.servicioIdInput.value = '';
   dom.servicioNombreInput.value = '';
@@ -211,6 +225,7 @@ function resetServicioForm() {
   dom.servicioActivoInput.checked = true;
 }
 
+// Rellena formulario para editar un servicio existente.
 function fillServicioForm(servicio) {
   dom.servicioIdInput.value = servicio.id_servicio;
   dom.servicioNombreInput.value = servicio.nombre || '';
@@ -220,6 +235,7 @@ function fillServicioForm(servicio) {
   dom.servicioActivoInput.checked = Boolean(servicio.activo);
 }
 
+// Cierra sesion local del panel.
 function signOut(message = 'Sesion finalizada.') {
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
@@ -228,6 +244,7 @@ function signOut(message = 'Sesion finalizada.') {
   setStatus(message);
 }
 
+// Maneja login admin y carga del dashboard.
 async function handleLoginSubmit(event) {
   event.preventDefault();
 
@@ -264,6 +281,7 @@ async function handleLoginSubmit(event) {
   }
 }
 
+// Atiende botones de acciones en la tabla de solicitudes.
 async function handleSolicitudesActions(event) {
   const button = event.target.closest('button[data-action]');
   if (!button) return;
@@ -305,6 +323,7 @@ async function handleSolicitudesActions(event) {
   }
 }
 
+// Atiende acciones editar/desactivar en la tabla de servicios.
 async function handleServiciosActions(event) {
   const button = event.target.closest('button[data-action]');
   if (!button) return;
@@ -333,6 +352,7 @@ async function handleServiciosActions(event) {
   }
 }
 
+// Crea o actualiza servicios segun exista id en el formulario.
 async function handleServicioSubmit(event) {
   event.preventDefault();
 
@@ -371,6 +391,7 @@ async function handleServicioSubmit(event) {
   }
 }
 
+// Punto de entrada del frontend: registra eventos y recupera sesion.
 async function init() {
   dom.baseApiInput.value = state.baseApi;
 

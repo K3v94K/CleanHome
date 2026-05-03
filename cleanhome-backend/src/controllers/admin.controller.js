@@ -1,7 +1,9 @@
 const pool = require('../config/db');
 
+// Estados permitidos por la regla de negocio.
 const ESTADOS_VALIDOS = ['Pendiente', 'Confirmada', 'En proceso', 'Completada', 'Cancelada'];
 
+// Lista todas las solicitudes para gestion administrativa.
 const getAllSolicitudes = async (req, res) => {
   try {
     const [rows] = await pool.query(
@@ -20,6 +22,7 @@ const getAllSolicitudes = async (req, res) => {
   }
 };
 
+// Lista personal disponible/no disponible para asignaciones.
 const getPersonalLimpieza = async (req, res) => {
   try {
     const [personal] = await pool.query(
@@ -35,6 +38,7 @@ const getPersonalLimpieza = async (req, res) => {
   }
 };
 
+// Cambia el estado de una solicitud.
 const updateEstado = async (req, res) => {
   try {
     const { id } = req.params;
@@ -45,6 +49,7 @@ const updateEstado = async (req, res) => {
     }
 
     const estadoNormalizado = String(estado).trim();
+    // Valida que solo se usen estados oficiales.
     if (!ESTADOS_VALIDOS.includes(estadoNormalizado)) {
       return res.status(400).json({
         message: `Estado no valido. Estados permitidos: ${ESTADOS_VALIDOS.join(', ')}.`,
@@ -63,6 +68,7 @@ const updateEstado = async (req, res) => {
   }
 };
 
+// Asigna un miembro de personal a una solicitud.
 const assignPersonal = async (req, res) => {
   try {
     const { id } = req.params;
@@ -89,6 +95,7 @@ const assignPersonal = async (req, res) => {
   }
 };
 
+// Lista servicios (activos e inactivos) para panel admin.
 const getServiciosAdmin = async (req, res) => {
   try {
     const [services] = await pool.query('SELECT * FROM servicios ORDER BY nombre');
@@ -99,6 +106,7 @@ const getServiciosAdmin = async (req, res) => {
   }
 };
 
+// Crea un nuevo servicio.
 const createServicio = async (req, res) => {
   try {
     const { nombre, descripcion, duracion_estimada, precio, activo } = req.body;
@@ -120,6 +128,7 @@ const createServicio = async (req, res) => {
   }
 };
 
+// Actualiza datos de un servicio existente.
 const updateServicio = async (req, res) => {
   try {
     const { id } = req.params;
@@ -145,6 +154,7 @@ const updateServicio = async (req, res) => {
   }
 };
 
+// Desactivacion logica de servicio (no elimina registro fisico).
 const deleteServicio = async (req, res) => {
   try {
     const { id } = req.params;

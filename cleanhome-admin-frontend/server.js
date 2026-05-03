@@ -2,10 +2,13 @@
 const fs = require('fs');
 const path = require('path');
 
+// Puerto del frontend (se mantiene separado del backend:3000).
 const PORT = Number(process.env.PORT) || 5173;
 const HOST = process.env.HOST || '0.0.0.0';
+// Carpeta raiz desde donde se sirven archivos estaticos.
 const ROOT = __dirname;
 
+// Mapeo basico de extensiones a tipo MIME HTTP.
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -23,6 +26,7 @@ function sendNotFound(res) {
   res.end('404 - Recurso no encontrado');
 }
 
+// Normaliza ruta y bloquea intentos de salir de ROOT (path traversal).
 function safePath(urlPath) {
   const decoded = decodeURIComponent(urlPath.split('?')[0]);
   const relPath = decoded === '/' ? '/index.html' : decoded;
@@ -44,6 +48,7 @@ const server = http.createServer((req, res) => {
       return;
     }
 
+    // Si solicitan carpeta, entrega index.html.
     const filePath = stat.isDirectory() ? path.join(absPath, 'index.html') : absPath;
     fs.readFile(filePath, (readErr, content) => {
       if (readErr) {

@@ -10,10 +10,12 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+  <!-- Elementos decorativos de fondo -->
   <div class="bg-orb orb-a" aria-hidden="true"></div>
   <div class="bg-orb orb-b" aria-hidden="true"></div>
 
   <main class="app-shell">
+    <!-- Cabecera principal del panel -->
     <header class="topbar">
       <div>
         <p class="eyebrow">Panel Administrativo</p>
@@ -25,6 +27,7 @@
       </div>
     </header>
 
+    <!-- Vista de login (visible cuando no hay sesion) -->
     <section id="loginView" class="card login-card">
       <h2>Ingreso de Administrador</h2>
       <p class="muted">Usa una cuenta con rol <strong>Admin</strong> para gestionar solicitudes y servicios.</p>
@@ -46,7 +49,9 @@
       </form>
     </section>
 
+    <!-- Dashboard admin (visible cuando hay sesion) -->
     <section id="dashboardView" class="dashboard hidden">
+      <!-- Modulo de gestion de solicitudes -->
       <article class="card">
         <div class="card-head">
           <h2>Solicitudes</h2>
@@ -71,6 +76,7 @@
         </div>
       </article>
 
+      <!-- Modulo de gestion de servicios -->
       <article class="card">
         <div class="card-head">
           <h2>Servicios</h2>
@@ -122,6 +128,7 @@
       </article>
     </section>
 
+    <!-- Barra de mensajes de estado -->
     <p id="statusLine" class="status-line">Listo para iniciar sesion.</p>
   </main>
 
