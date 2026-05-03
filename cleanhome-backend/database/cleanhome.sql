@@ -97,7 +97,7 @@ SELECT
     'admin@cleanhome.com',
     '7000-0101',
     'San Salvador',
-    '$2b$10$BBuT3gWOS8j2e02F92k6NejWoeKn0RhP2poQ5TgaclceLCD4rZUxK',
+    '$2b$10$gHxBFeX.bbwLIwLxNXEfn.2CfnMoYZSiJvJyy7N4FhjPsRJWfWa06',
     (SELECT id_rol FROM roles WHERE nombre_rol = 'Admin')
 WHERE NOT EXISTS (
     SELECT 1 FROM usuarios WHERE correo = 'admin@cleanhome.com'

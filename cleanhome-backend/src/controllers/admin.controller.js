@@ -20,6 +20,21 @@ const getAllSolicitudes = async (req, res) => {
   }
 };
 
+const getPersonalLimpieza = async (req, res) => {
+  try {
+    const [personal] = await pool.query(
+      `SELECT id_personal, nombre, telefono, disponible
+       FROM personal_limpieza
+       ORDER BY disponible DESC, nombre ASC`
+    );
+
+    res.json({ personal });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener personal de limpieza.' });
+  }
+};
+
 const updateEstado = async (req, res) => {
   try {
     const { id } = req.params;
@@ -153,6 +168,7 @@ const deleteServicio = async (req, res) => {
 
 module.exports = {
   getAllSolicitudes,
+  getPersonalLimpieza,
   updateEstado,
   assignPersonal,
   getServiciosAdmin,

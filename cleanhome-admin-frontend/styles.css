@@ -1,0 +1,283 @@
+﻿:root {
+  --bg: #f4f7f7;
+  --panel: #ffffff;
+  --ink: #143042;
+  --muted: #5b7283;
+  --brand: #0f766e;
+  --brand-2: #0b5d56;
+  --accent: #f97316;
+  --border: #d3dee4;
+  --ok: #1f9d65;
+  --danger: #c43d1a;
+  --shadow: 0 14px 38px rgba(15, 39, 56, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 5% 10%, #d5ece8 0%, rgba(213, 236, 232, 0) 36%),
+    radial-gradient(circle at 90% 5%, #ffe4cf 0%, rgba(255, 228, 207, 0) 30%),
+    var(--bg);
+}
+
+.bg-orb {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 999px;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.orb-a {
+  top: -70px;
+  left: -70px;
+  background: rgba(15, 118, 110, 0.35);
+}
+
+.orb-b {
+  right: -80px;
+  bottom: -90px;
+  background: rgba(249, 115, 22, 0.28);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 36px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.session-pill {
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--brand-2);
+  border: 1px solid rgba(15, 118, 110, 0.3);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.login-card {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.dashboard {
+  display: grid;
+  gap: 16px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid.compact {
+  margin-bottom: 14px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.92rem;
+}
+
+label.full,
+.form-actions.full {
+  grid-column: 1 / -1;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 11px;
+  background: #fff;
+  color: var(--ink);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--brand);
+  outline: 2px solid rgba(15, 118, 110, 0.15);
+}
+
+.checkline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: transform 0.16s ease, opacity 0.16s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn.primary {
+  color: #fff;
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+}
+
+.btn.secondary {
+  background: #e5f2f1;
+  color: var(--brand-2);
+}
+
+.btn.ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.btn.warn {
+  background: #ffe7de;
+  color: var(--danger);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e7eef2;
+  text-align: left;
+  padding: 10px;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+th {
+  color: #4a6070;
+  font-weight: 600;
+}
+
+.actions-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.status-line {
+  margin: 14px 2px 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.status-line.ok {
+  color: var(--ok);
+}
+
+.status-line.error {
+  color: var(--danger);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkline {
+    margin-top: 0;
+  }
+}

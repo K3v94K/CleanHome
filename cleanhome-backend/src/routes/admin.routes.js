@@ -8,6 +8,7 @@ router.use(authMiddleware);
 router.use(requireRole('Admin'));
 
 router.get('/solicitudes', adminController.getAllSolicitudes);
+router.get('/personal', adminController.getPersonalLimpieza);
 router.patch('/solicitudes/:id/estado', adminController.updateEstado);
 router.patch('/solicitudes/:id/asignar-personal', adminController.assignPersonal);
 

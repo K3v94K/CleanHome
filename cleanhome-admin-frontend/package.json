@@ -1,0 +1,10 @@
+﻿{
+  "name": "cleanhome-admin-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend web administrativo para CleanHome",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
