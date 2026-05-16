@@ -56,7 +56,10 @@ const updateEstado = async (req, res) => {
       });
     }
 
-    const [result] = await pool.query('UPDATE solicitudes SET estado = ? WHERE id_solicitud = ?', [estadoNormalizado, id]);
+    const [result] = await pool.query(
+      'UPDATE solicitudes SET estado = ?, updated_at = CURRENT_TIMESTAMP WHERE id_solicitud = ?',
+      [estadoNormalizado, id]
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Solicitud no encontrada.' });
     }
@@ -83,7 +86,10 @@ const assignPersonal = async (req, res) => {
       return res.status(400).json({ message: 'Personal de limpieza no encontrado.' });
     }
 
-    const [result] = await pool.query('UPDATE solicitudes SET id_personal = ? WHERE id_solicitud = ?', [id_personal, id]);
+    const [result] = await pool.query(
+      'UPDATE solicitudes SET id_personal = ?, updated_at = CURRENT_TIMESTAMP WHERE id_solicitud = ?',
+      [id_personal, id]
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Solicitud no encontrada.' });
     }
@@ -139,7 +145,9 @@ const updateServicio = async (req, res) => {
     }
 
     const [result] = await pool.query(
-      `UPDATE servicios SET nombre = ?, descripcion = ?, duracion_estimada = ?, precio = ?, activo = ? WHERE id_servicio = ?`,
+      `UPDATE servicios
+       SET nombre = ?, descripcion = ?, duracion_estimada = ?, precio = ?, activo = ?, updated_at = CURRENT_TIMESTAMP
+       WHERE id_servicio = ?`,
       [nombre, descripcion || null, duracion_estimada || null, precio, activo == null ? true : activo, id]
     );
 
@@ -168,7 +176,7 @@ const deleteServicio = async (req, res) => {
       return res.json({ message: 'Servicio ya estaba desactivado.' });
     }
 
-    await pool.query('UPDATE servicios SET activo = FALSE WHERE id_servicio = ?', [id]);
+    await pool.query('UPDATE servicios SET activo = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id_servicio = ?', [id]);
     res.json({ message: 'Servicio desactivado correctamente.' });
   } catch (error) {
     console.error(error);

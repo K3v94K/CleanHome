@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password_hash VARCHAR(255) NOT NULL,
     id_rol INT NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
 ) ENGINE=InnoDB;
 
@@ -29,7 +30,9 @@ CREATE TABLE IF NOT EXISTS servicios (
     descripcion VARCHAR(255),
     duracion_estimada VARCHAR(50),
     precio DECIMAL(10,2) NOT NULL,
-    activo BOOLEAN DEFAULT TRUE
+    activo BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 -- Personal de limpieza disponible para asignaciones.
@@ -37,7 +40,9 @@ CREATE TABLE IF NOT EXISTS personal_limpieza (
     id_personal INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
-    disponible BOOLEAN DEFAULT TRUE
+    disponible BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 -- Solicitudes de limpieza creadas por clientes.
@@ -50,10 +55,13 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     hora_servicio TIME NOT NULL,
     direccion_atencion VARCHAR(200) NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'Pendiente',
+    client_temp_id VARCHAR(80) NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicio),
-    FOREIGN KEY (id_personal) REFERENCES personal_limpieza(id_personal)
+    FOREIGN KEY (id_personal) REFERENCES personal_limpieza(id_personal),
+    UNIQUE KEY uq_solicitudes_usuario_client_temp (id_usuario, client_temp_id)
 ) ENGINE=InnoDB;
 
 -- Semillas de roles base.

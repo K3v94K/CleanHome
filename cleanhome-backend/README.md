@@ -56,6 +56,12 @@ JWT_EXPIRES_IN=8h
 mysql -u root -p < database/cleanhome.sql
 ```
 
+Si ya tenias la base creada antes de estos cambios, aplica la migracion una sola vez:
+
+```bash
+mysql -u root -p < database/migrations/001_sync_support.sql
+```
+
 ## Ejecutar
 
 ```bash
@@ -93,6 +99,8 @@ WHERE correo = 'admin@cleanhome.com';
 
 - `POST /api/solicitudes`
 - `GET /api/solicitudes/mis-solicitudes`
+- `GET /api/solicitudes/mis-solicitudes?updated_since=2026-05-16T10:00:00`
+- `POST /api/solicitudes/sync`
 - `GET /api/solicitudes/:id`
 
 ### Admin (JWT + rol Admin)
@@ -105,3 +113,29 @@ WHERE correo = 'admin@cleanhome.com';
 - `POST /api/admin/servicios`
 - `PUT /api/admin/servicios/:id`
 - `DELETE /api/admin/servicios/:id`
+
+## Soporte para SQLite en Android
+
+El backend se mantiene como fuente central de datos. La app Android puede usar SQLite como almacenamiento local y sincronizar usando:
+
+- `GET /api/servicios?updated_since=fecha`: obtiene servicios modificados desde una fecha. Si se usa este parametro, tambien puede devolver servicios desactivados para que Android actualice su cache local.
+- `GET /api/solicitudes/mis-solicitudes?updated_since=fecha`: obtiene solicitudes del usuario modificadas desde una fecha.
+- `POST /api/solicitudes/sync`: recibe solicitudes creadas offline en Android.
+
+Ejemplo de sincronizacion de solicitudes:
+
+```json
+{
+  "solicitudes": [
+    {
+      "client_temp_id": "android-uuid-001",
+      "id_servicio": 1,
+      "fecha_servicio": "2026-05-20",
+      "hora_servicio": "09:00:00",
+      "direccion_atencion": "San Salvador"
+    }
+  ]
+}
+```
+
+`client_temp_id` debe ser generado por Android y guardado en SQLite. Si la app reintenta la sincronizacion, el backend lo usa para no crear solicitudes duplicadas.

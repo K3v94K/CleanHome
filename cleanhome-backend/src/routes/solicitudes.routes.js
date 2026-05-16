@@ -7,6 +7,8 @@ const solicitudesController = require('../controllers/solicitudes.controller');
 router.post('/', authMiddleware, solicitudesController.createSolicitud);
 // Lista todas las solicitudes del usuario autenticado.
 router.get('/mis-solicitudes', authMiddleware, solicitudesController.getMisSolicitudes);
+// Sincroniza solicitudes creadas localmente en Android.
+router.post('/sync', authMiddleware, solicitudesController.syncSolicitudes);
 // Obtiene una solicitud puntual, validando propietario.
 router.get('/:id', authMiddleware, solicitudesController.getSolicitudById);
 
