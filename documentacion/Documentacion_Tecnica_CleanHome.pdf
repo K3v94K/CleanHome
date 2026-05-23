@@ -1,0 +1,276 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 3763 >>
+stream
+BT /F2 9 Tf 58 760 Td (CleanHome - Manual Tecnico) Tj ET
+0.75 w 58 750 m 554 750 l S
+0.04 0.09 0.17 rg BT /F2 22 Tf 58 724 Td (Manual Tecnico CleanHome) Tj ET
+0.22 0.26 0.32 rg BT /F1 12 Tf 58 693 Td (Guia de instalacion, ejecucion, arquitectura e integracion local) Tj ET
+0.35 0.39 0.45 rg BT /F1 10 Tf 58 670 Td (Fecha de actualizacion: 23 de mayo de 2026) Tj ET
+0.35 0.39 0.45 rg BT /F1 10 Tf 58 653 Td (Proyecto: CleanHome | Backend: Node.js + Express + MySQL | Android: Kotlin + Retrofit + SQLite | Web: HTML/CSS/JS) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 630 Td (1. Proposito) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 606 Td (Este manual tecnico describe como preparar, levantar y validar el proyecto CleanHome) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 592 Td (de extremo a extremo. Incluye base de datos MySQL, backend REST, aplicativo web) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 578 Td (administrativo y aplicativo Android con almacenamiento local SQLite.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 564 Td (El documento tambien resume arquitectura, estructura de carpetas, endpoints, variables) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 550 Td (de entorno, flujo de pruebas, mantenimiento y consideraciones de seguridad.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 530 Td (2. Alcance del sistema) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 506 Td (* Backend REST para autenticacion, catalogo de servicios, solicitudes y) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 492 Td (  administracion.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 478 Td (* Base central MySQL como fuente oficial de datos.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 464 Td (* Frontend web administrativo para gestionar servicios, solicitudes y asignaciones.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 450 Td (* Aplicacion Android para clientes y panel admin basico.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 436 Td (* SQLite local en Android para cache de servicios, sesion e historial.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 422 Td (* Preparacion para despliegue futuro cambiando configuracion de URL y ambiente.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 402 Td (3. Arquitectura general) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 378 Td (Android App -> Backend Express -> MySQL) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 364 Td (Admin Web -> Backend Express -> MySQL) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 350 Td (El backend es la capa central. Android y el panel web no acceden directamente a MySQL;) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 336 Td (consumen endpoints HTTP bajo /api. Android usa SQLite solo como almacenamiento local) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 322 Td (de apoyo.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 302 Td (4. Requisitos de ambiente) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 278 Td (* Node.js y npm instalados.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 264 Td (* MySQL Server instalado y en ejecucion.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 250 Td (* Base de datos creada desde cleanhome-backend/database/cleanhome.sql.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 236 Td (* Android Studio instalado para compilar y ejecutar cleanHome-androidApp.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 222 Td (* Emulador Android o dispositivo fisico en la misma red que la PC.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 208 Td (* Git instalado para control de versiones.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 188 Td (5. Estructura del repositorio) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 164 Td (CleanHome/) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 150 Td (|- cleanhome-backend/            API REST Node.js + Express) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 136 Td (|- cleanhome-admin-frontend/     Panel web administrativo) Tj ET
+0.35 0.39 0.45 rg BT /F1 9 Tf 500 32 Td (Pagina 1 de 5) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3447 >>
+stream
+BT /F2 9 Tf 58 760 Td (CleanHome - Manual Tecnico) Tj ET
+0.75 w 58 750 m 554 750 l S
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 724 Td (|- cleanHome-androidApp/         Aplicacion Android Kotlin/XML) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 710 Td (|- cdocumentacion/               Fuente Word del manual tecnico) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 696 Td (|- documentacion/                PDF del manual tecnico) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 682 Td (|- tools/                        Scripts auxiliares) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 668 Td (`- README.md                     Guia general del proyecto) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 648 Td (6. Base de datos MySQL) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 624 Td (Si no hay datos relevantes, la opcion recomendada es recrear la base desde cero usando) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 610 Td (el script principal.) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 596 Td (mysql -u TU_USUARIO -p) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 582 Td (DROP DATABASE IF EXISTS CleanHomeDB;) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 568 Td (CREATE DATABASE CleanHomeDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 554 Td (exit) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 540 Td (mysql -u TU_USUARIO -p CleanHomeDB < cleanhome-backend/database/cleanhome.sql) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 526 Td (Si la base ya existia y se desea migrar, aplicar una sola vez:) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 512 Td (mysql -u TU_USUARIO -p CleanHomeDB < cleanhome-) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 498 Td (backend/database/migrations/001_sync_support.sql) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 484 Td (Tablas principales: roles, usuarios, servicios, personal_limpieza y solicitudes. La) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 470 Td (tabla solicitudes incluye client_temp_id para evitar duplicados en sincronizacion) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 456 Td (movil.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 436 Td (7. Configuracion del backend) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 412 Td (Crear cleanhome-backend/.env. Este archivo no debe subirse a Git.) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 398 Td (PORT=3000) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 384 Td (DB_HOST=localhost) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 370 Td (DB_USER=TU_USUARIO) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 356 Td (DB_PASSWORD=TU_PASSWORD) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 342 Td (DB_NAME=CleanHomeDB) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 328 Td (JWT_SECRET=CAMBIAR_EN_CADA_AMBIENTE) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 314 Td (JWT_EXPIRES_IN=8h) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 300 Td (Para levantar el backend:) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 286 Td (cd cleanhome-backend) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 272 Td (npm install) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 258 Td (npm start) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 244 Td (URL esperada: http://localhost:3000/api) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 230 Td (Validacion rapida: abrir http://localhost:3000/api/servicios y confirmar una respuesta) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 216 Td (JSON con servicios.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 196 Td (8. Endpoints principales) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 172 Td (* POST /api/auth/register - Registro de cliente.) Tj ET
+0.35 0.39 0.45 rg BT /F1 9 Tf 500 32 Td (Pagina 2 de 5) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 3788 >>
+stream
+BT /F2 9 Tf 58 760 Td (CleanHome - Manual Tecnico) Tj ET
+0.75 w 58 750 m 554 750 l S
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 724 Td (* POST /api/auth/login - Login y retorno de JWT.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 710 Td (* GET /api/servicios - Catalogo publico de servicios activos.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 696 Td (* GET /api/servicios/:id - Detalle de servicio.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 682 Td (* POST /api/solicitudes - Crear solicitud autenticada.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 668 Td (* GET /api/solicitudes/mis-solicitudes - Historial del cliente autenticado.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 654 Td (* POST /api/solicitudes/sync - Sincronizacion de solicitudes offline.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 640 Td (* GET /api/admin/solicitudes - Solicitudes para admin.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 626 Td (* PATCH /api/admin/solicitudes/:id/estado - Cambio de estado.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 612 Td (* PATCH /api/admin/solicitudes/:id/asignar-personal - Asignacion de personal.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 598 Td (* GET /api/admin/servicios - Lista admin de servicios.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 584 Td (* POST /api/admin/servicios - Crear servicio.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 570 Td (* PUT /api/admin/servicios/:id - Editar servicio.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 556 Td (* DELETE /api/admin/servicios/:id - Desactivar servicio.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 536 Td (9. Aplicativo web administrativo) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 512 Td (El panel web se encuentra en cleanhome-admin-frontend y se sirve como frontend) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 498 Td (estatico mediante Node.js.) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 484 Td (cd cleanhome-admin-frontend) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 470 Td (npm install) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 456 Td (npm start) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 442 Td (URL esperada: http://localhost:5173) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 428 Td (* Login con cuenta de rol Admin.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 414 Td (* Listado de solicitudes.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 400 Td (* Cambio de estado de solicitud.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 386 Td (* Asignacion de personal de limpieza.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 372 Td (* CRUD logico de servicios: crear, editar y desactivar.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 358 Td (* La URL base de API se configura desde la pantalla de login.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 338 Td (10. Aplicativo Android) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 314 Td (La app Android esta en cleanHome-androidApp. Se ejecuta desde Android Studio y consume) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 300 Td (la API usando Retrofit.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 286 Td (Archivo de configuracion de API:) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 272 Td (cleanHome-androidApp/app/src/main/java/.../api/ApiConfig.kt) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 258 Td (Para emulador Android usar:) Tj ET
+0.20 0.24 0.30 rg BT /F3 9 Tf 72 244 Td (const val BASE_URL = "http://10.0.2.2:3000/api/") Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 230 Td (Para dispositivo fisico usar una IP local de la PC solo en el entorno local, por) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 216 Td (ejemplo el formato http://IP_DE_TU_PC:3000/api/. No subir IPs personales al) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 202 Td (repositorio.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 188 Td (* Registro y login de cliente.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 174 Td (* Guardado de token JWT y datos de sesion.) Tj ET
+0.35 0.39 0.45 rg BT /F1 9 Tf 500 32 Td (Pagina 3 de 5) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 3671 >>
+stream
+BT /F2 9 Tf 58 760 Td (CleanHome - Manual Tecnico) Tj ET
+0.75 w 58 750 m 554 750 l S
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 724 Td (* Catalogo de servicios desde backend.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 710 Td (* Agenda con selectores nativos de fecha y hora.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 696 Td (* Historial con fecha corta y colores por estado.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 682 Td (* Perfil con navegacion de regreso y cierre de sesion.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 668 Td (* Panel admin Android para listar solicitudes, cambiar estado y administrar) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 654 Td (  servicios.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 634 Td (11. SQLite local Android) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 610 Td (SQLite local no reemplaza MySQL. Su funcion es conservar datos utiles en el) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 596 Td (dispositivo y preparar soporte offline.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 582 Td (* usuario_sesion: usuario autenticado y token.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 568 Td (* servicios: cache del catalogo.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 554 Td (* solicitudes: historial local.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 540 Td (* solicitudes_pendientes_sync: cola para solicitudes creadas sin red.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 526 Td (* sync_metadata: marcas de ultima sincronizacion por modulo.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 512 Td (Archivo de referencia: cleanhome-backend/database/sqlite_android_cleanhome.sql) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 492 Td (12. Flujo de levantamiento paso a paso) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 468 Td (1. Iniciar MySQL Server.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 454 Td (2. Crear o actualizar CleanHomeDB con los scripts SQL.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 440 Td (3. Configurar cleanhome-backend/.env.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 426 Td (4. Ejecutar npm install y npm start en cleanhome-backend.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 412 Td (5. Validar http://localhost:3000/api/servicios.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 398 Td (6. Ejecutar npm install y npm start en cleanhome-admin-frontend.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 384 Td (7. Abrir http://localhost:5173 y validar login admin.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 370 Td (8. Crear un servicio desde el panel web.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 356 Td (9. Abrir cleanHome-androidApp en Android Studio.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 342 Td (10. Confirmar ApiConfig.kt con 10.0.2.2 para emulador.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 328 Td (11. Ejecutar la app Android.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 314 Td (12. Registrar o iniciar sesion con cliente.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 300 Td (13. Confirmar que el servicio creado en web aparece en catalogo Android.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 286 Td (14. Agendar una solicitud desde Android.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 272 Td (15. Validar la solicitud en historial Android y en panel admin web.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 252 Td (13. Validacion de integracion) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 228 Td (* GET /api/servicios responde desde navegador o Postman.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 214 Td (* El panel web crea servicios y se reflejan en MySQL.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 200 Td (* Android carga los servicios creados desde web.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 186 Td (* Android crea solicitudes con JWT valido.) Tj ET
+0.35 0.39 0.45 rg BT /F1 9 Tf 500 32 Td (Pagina 4 de 5) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 3774 >>
+stream
+BT /F2 9 Tf 58 760 Td (CleanHome - Manual Tecnico) Tj ET
+0.75 w 58 750 m 554 750 l S
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 724 Td (* El historial Android muestra la solicitud con estado y fecha legible.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 710 Td (* El panel admin web o Android muestra la solicitud creada.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 696 Td (* El cambio de estado se refleja posteriormente en el historial.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 676 Td (14. Seguridad y buenas practicas) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 652 Td (* No subir .env, local.properties, node_modules ni carpetas build.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 638 Td (* No subir IPs personales; usar placeholders o 10.0.2.2 para emulador.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 624 Td (* Cambiar JWT_SECRET por ambiente.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 610 Td (* Cambiar credenciales demo antes de un despliegue real.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 596 Td (* No guardar contrasenas en texto plano; el backend usa bcrypt.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 582 Td (* Usar HTTPS en despliegues reales.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 568 Td (* Configurar CORS segun dominios reales en produccion.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 548 Td (15. Mantenimiento) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 524 Td (* Actualizar README.md cuando cambie la arquitectura o los puertos.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 510 Td (* Actualizar cleanhome-backend/README.md cuando cambien endpoints o variables de) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 496 Td (  entorno.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 482 Td (* Actualizar cleanHome-androidApp/README.md cuando cambie la URL base, SQLite o) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 468 Td (  flujos Android.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 454 Td (* Crear migraciones SQL para cambios en bases existentes.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 440 Td (* Probar backend, web y Android antes de hacer merge a main.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 420 Td (16. Solucion de problemas) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 396 Td (* Android no conecta al backend: Usar 10.0.2.2 en emulador. En dispositivo fisico) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 382 Td (  usar IP local de la PC y revisar firewall.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 368 Td (* Login falla: Verificar usuario, rol, hash de contrasena y JWT_SECRET.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 354 Td (* Servicios no aparecen: Validar que servicios.activo sea verdadero y que GET) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 340 Td (  /api/servicios responda.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 326 Td (* Solicitud no se crea: Revisar token JWT, campos obligatorios y logs del backend.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 312 Td (* Panel web no carga datos: Confirmar API Base en login y que backend este en) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 298 Td (  ejecucion.) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 284 Td (* Fecha larga en Android: Usar formateo de UI en adapters; el backend puede devolver) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 74 270 Td (  timestamps completos.) Tj ET
+0.00 0.32 0.62 rg BT /F2 15 Tf 58 250 Td (17. Cierre) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 226 Td (Con este flujo, CleanHome queda listo para ejecutarse localmente con MySQL, backend) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 212 Td (Express, panel web administrativo y app Android integrada. Para un despliegue futuro,) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 198 Td (el cambio central sera publicar backend/base de datos y actualizar la URL base) Tj ET
+0.12 0.16 0.22 rg BT /F1 10 Tf 58 184 Td (consumida por web y Android.) Tj ET
+0.35 0.39 0.45 rg BT /F1 9 Tf 500 32 Td (Pagina 5 de 5) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000148 00000 n 
+0000000245 00000 n 
+0000000347 00000 n 
+0000000442 00000 n 
+0000004256 00000 n 
+0000004402 00000 n 
+0000007900 00000 n 
+0000008046 00000 n 
+0000011886 00000 n 
+0000012034 00000 n 
+0000015757 00000 n 
+0000015905 00000 n 
+0000019731 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+19879
+%%EOF

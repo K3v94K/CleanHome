@@ -1,6 +1,5 @@
 # Generated documentation build folders
 cdocumentacion/docx_build_*/
-documentacion/
 
 # Local environment files
 .env
