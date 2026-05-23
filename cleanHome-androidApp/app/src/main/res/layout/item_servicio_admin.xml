@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#FFFFFF"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:elevation="2dp"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_item_servicio_nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Limpieza General"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tv_item_servicio_precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="$40.00 / hr"
+            android:textSize="14sp"
+            android:textColor="#0D6EFD"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_item_servicio_editar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_edit"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:ignore="HardcodedText,ImageContrastCheck"
+        android:contentDescription="Editar servicio"
+        app:tint="#2E7D32"/>
+
+    <ImageButton
+        android:id="@+id/btn_item_servicio_eliminar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_delete"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:ignore="HardcodedText,ImageContrastCheck"
+        android:contentDescription="Eliminar servicio"
+        app:tint="#C62828"
+        android:layout_marginStart="8dp"/>
+
+</LinearLayout>

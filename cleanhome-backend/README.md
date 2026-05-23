@@ -52,6 +52,8 @@ JWT_EXPIRES_IN=8h
 
 ## Base de datos
 
+Si no hay datos relevantes, se recomienda recrear la base desde cero usando `database/cleanhome.sql`.
+
 ```bash
 mysql -u root -p < database/cleanhome.sql
 ```
@@ -116,7 +118,35 @@ WHERE correo = 'admin@cleanhome.com';
 
 ## Soporte para SQLite en Android
 
-El backend se mantiene como fuente central de datos. La app Android puede usar SQLite como almacenamiento local y sincronizar usando:
+El backend se mantiene como fuente central de datos. La app Android usa Retrofit para consumir la API y SQLite como almacenamiento local de sesion, servicios y solicitudes.
+
+Para emulador Android, la URL del backend local se configura como:
+
+```text
+http://10.0.2.2:3000/api/
+```
+
+Para celular fisico en la misma red:
+
+```text
+http://IP_DE_TU_PC:3000/api/
+```
+
+Endpoints usados por Android:
+
+- `POST /api/auth/register`: registro de clientes.
+- `POST /api/auth/login`: autenticacion y obtencion de JWT.
+- `GET /api/servicios`: catalogo de servicios.
+- `POST /api/solicitudes`: agendar solicitud autenticada.
+- `GET /api/solicitudes/mis-solicitudes`: historial del cliente.
+- `GET /api/admin/solicitudes`: listado admin en Android.
+- `PATCH /api/admin/solicitudes/:id/estado`: cambio de estado admin.
+- `GET /api/admin/servicios`: listado admin de servicios.
+- `POST /api/admin/servicios`: crear servicio desde Android admin.
+- `PUT /api/admin/servicios/:id`: editar servicio desde Android admin.
+- `DELETE /api/admin/servicios/:id`: desactivar servicio desde Android admin.
+
+Soporte de sincronizacion preparado:
 
 - `GET /api/servicios?updated_since=fecha`: obtiene servicios modificados desde una fecha. Si se usa este parametro, tambien puede devolver servicios desactivados para que Android actualice su cache local.
 - `GET /api/solicitudes/mis-solicitudes?updated_since=fecha`: obtiene solicitudes del usuario modificadas desde una fecha.

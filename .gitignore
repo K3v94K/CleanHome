@@ -1,0 +1,21 @@
+# Generated documentation build folders
+cdocumentacion/docx_build_*/
+documentacion/
+
+# Local environment files
+.env
+*.local
+
+# Node dependencies and logs
+node_modules/
+npm-debug.log*
+
+# Android/Gradle generated files
+.gradle/
+build/
+*/build/
+local.properties
+
+# IDE files
+.idea/
+*.iml

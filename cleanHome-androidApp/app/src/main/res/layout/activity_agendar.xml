@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/tv_agendar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="‹"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            android:paddingEnd="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agendar Cita"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#111827" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#F3F4F6"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tv_agendar_servicio_nombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cargando servicio..."
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#111827" />
+
+                <TextView
+                    android:id="@+id/tv_agendar_servicio_detalle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$--"
+                    android:textColor="#0D6EFD"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha del servicio"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/et_agendar_fecha"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Seleccionar fecha"
+                android:inputType="none"
+                android:focusable="false"
+                android:background="#F3F4F6"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora preferida"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/et_agendar_hora"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Seleccionar hora"
+                android:inputType="none"
+                android:focusable="false"
+                android:background="#F3F4F6"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/et_agendar_direccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:hint="Ej. Casa Principal, Av. Reforma 123..."
+                android:background="#F3F4F6"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280"
+                android:padding="12dp"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="24dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Total estimado"
+            android:textColor="#4B5563" />
+
+        <TextView
+            android:id="@+id/tv_agendar_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:textColor="#111827" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_agendar_confirmar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Confirmar Reserva"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#0D6EFD" />
+</LinearLayout>
