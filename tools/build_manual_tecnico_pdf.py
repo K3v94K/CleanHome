@@ -7,6 +7,7 @@ from textwrap import wrap
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "documentacion" / "Documentacion_Tecnica_CleanHome.pdf"
+SOURCE = ROOT / "documentacion" / "Manual_Tecnico_CleanHome.md"
 
 PAGE_W = 612
 PAGE_H = 792
@@ -274,6 +275,34 @@ def manual_blocks() -> list[TextBlock]:
     return b
 
 
+def manual_blocks_from_markdown() -> list[TextBlock]:
+    blocks: list[TextBlock] = []
+    in_code = False
+
+    for raw_line in SOURCE.read_text(encoding="utf-8").splitlines():
+        line = raw_line.rstrip()
+        if not line.strip():
+            continue
+        if line.strip() == "```":
+            in_code = not in_code
+            continue
+        if in_code:
+            blocks.append(TextBlock(line, "code"))
+            continue
+        if line.startswith("# "):
+            blocks.append(TextBlock(line[2:].strip(), "title"))
+        elif line.startswith("## "):
+            blocks.append(TextBlock(line[3:].strip(), "h1"))
+        elif line.startswith("### "):
+            blocks.append(TextBlock(line[4:].strip(), "h1"))
+        elif line.startswith("- "):
+            blocks.append(TextBlock(line[2:].strip(), "bullet"))
+        else:
+            blocks.append(TextBlock(line.strip(), "p"))
+
+    return blocks
+
+
 def split_pages(blocks: list[TextBlock]) -> list[list[tuple[str, str]]]:
     pages: list[list[tuple[str, str]]] = []
     page: list[tuple[str, str]] = []
@@ -426,7 +455,8 @@ def build_pdf(pages: list[list[tuple[str, str]]]) -> bytes:
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    pages = split_pages(manual_blocks())
+    blocks = manual_blocks_from_markdown() if SOURCE.exists() else manual_blocks()
+    pages = split_pages(blocks)
     OUT.write_bytes(build_pdf(pages))
     print(f"PDF generado: {OUT}")
     print(f"Paginas: {len(pages)}")
