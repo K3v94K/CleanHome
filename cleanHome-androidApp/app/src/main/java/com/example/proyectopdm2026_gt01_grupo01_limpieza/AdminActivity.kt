@@ -36,13 +36,14 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var btnTabServicios: Button
     private lateinit var tvTituloLista: TextView
     private lateinit var fabAddServicio: FloatingActionButton
+    private var currentTab = TAB_SOLICITUDES
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
 
         sessionManager = SessionManager(this)
-        findViewById<TextView>(R.id.tv_admin_back).setOnClickListener { finish() }
+        findViewById<TextView>(R.id.tv_admin_back).setOnClickListener { handleBackNavigation() }
 
         btnTabSolicitudes = findViewById(R.id.btn_tab_solicitudes)
         btnTabServicios = findViewById(R.id.btn_tab_servicios)
@@ -58,12 +59,26 @@ class AdminActivity : AppCompatActivity() {
         showSolicitudes()
     }
 
+    @Deprecated("Deprecated in Android SDK, kept for compatibility with this project setup.")
+    override fun onBackPressed() {
+        handleBackNavigation()
+    }
+
+    private fun handleBackNavigation() {
+        if (currentTab == TAB_SERVICES) {
+            showSolicitudes()
+        } else {
+            finish()
+        }
+    }
+
     private fun showSolicitudes() {
         selectSolicitudesTab()
         val authHeader = getAuthHeaderOrWarn() ?: return
 
         ApiClient.service.getAdminSolicitudes(authHeader).enqueue(object : Callback<SolicitudesResponse> {
             override fun onResponse(call: Call<SolicitudesResponse>, response: Response<SolicitudesResponse>) {
+                if (currentTab != TAB_SOLICITUDES) return
                 if (response.isSuccessful) {
                     rvLista.adapter = AdminSolicitudesAdapter(response.body()?.solicitudes.orEmpty()) {
                         showEstadoDialog(it)
@@ -85,6 +100,7 @@ class AdminActivity : AppCompatActivity() {
 
         ApiClient.service.getAdminServicios(authHeader).enqueue(object : Callback<ServiciosResponse> {
             override fun onResponse(call: Call<ServiciosResponse>, response: Response<ServiciosResponse>) {
+                if (currentTab != TAB_SERVICES) return
                 if (response.isSuccessful) {
                     rvLista.adapter = AdminServiciosAdapter(
                         response.body()?.servicios.orEmpty(),
@@ -222,6 +238,7 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun selectSolicitudesTab() {
+        currentTab = TAB_SOLICITUDES
         btnTabSolicitudes.setBackgroundColor(Color.parseColor("#0D6EFD"))
         btnTabSolicitudes.setTextColor(Color.WHITE)
         btnTabServicios.setBackgroundColor(Color.parseColor("#E9ECEF"))
@@ -231,11 +248,17 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun selectServiciosTab() {
+        currentTab = TAB_SERVICES
         btnTabServicios.setBackgroundColor(Color.parseColor("#0D6EFD"))
         btnTabServicios.setTextColor(Color.WHITE)
         btnTabSolicitudes.setBackgroundColor(Color.parseColor("#E9ECEF"))
         btnTabSolicitudes.setTextColor(Color.parseColor("#374151"))
         tvTituloLista.text = "Gestión de Servicios"
         fabAddServicio.visibility = View.VISIBLE
+    }
+
+    companion object {
+        private const val TAB_SOLICITUDES = "solicitudes"
+        private const val TAB_SERVICES = "servicios"
     }
 }
