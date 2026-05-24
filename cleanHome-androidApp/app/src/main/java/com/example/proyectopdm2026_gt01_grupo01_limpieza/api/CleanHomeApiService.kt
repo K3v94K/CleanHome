@@ -10,6 +10,8 @@ import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.RegisterResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.ServicioRequest
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.ServiciosResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.SolicitudesResponse
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.SyncSolicitudesRequest
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.SyncSolicitudesResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.UpdateEstadoRequest
 import retrofit2.Call
 import retrofit2.http.Body
@@ -41,6 +43,12 @@ interface CleanHomeApiService {
     fun getMisSolicitudes(
         @Header("Authorization") authorization: String
     ): Call<SolicitudesResponse>
+
+    @POST("solicitudes/sync")
+    fun syncSolicitudes(
+        @Header("Authorization") authorization: String,
+        @Body request: SyncSolicitudesRequest
+    ): Call<SyncSolicitudesResponse>
 
     @GET("admin/solicitudes")
     fun getAdminSolicitudes(

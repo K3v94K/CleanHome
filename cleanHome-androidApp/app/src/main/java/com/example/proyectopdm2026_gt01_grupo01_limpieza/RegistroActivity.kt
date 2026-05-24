@@ -2,6 +2,7 @@ package com.example.proyectopdm2026_gt01_grupo01_limpieza
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -48,6 +49,31 @@ class RegistroActivity : AppCompatActivity() {
 
             if (nombre.isBlank() || correo.isBlank() || password.isBlank()) {
                 Toast.makeText(this, "Nombre, correo y contraseña son obligatorios.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!isValidName(nombre)) {
+                etNombre.error = "Solo letras y espacios."
+                etNombre.requestFocus()
+                return@setOnClickListener
+            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+                etCorreo.error = "Correo invalido."
+                etCorreo.requestFocus()
+                return@setOnClickListener
+            }
+            if (password.length < MIN_PASSWORD_LENGTH) {
+                etPassword.error = "Minimo 8 caracteres."
+                etPassword.requestFocus()
+                return@setOnClickListener
+            }
+            if (telefono.isNotBlank() && !telefono.matches(Regex("^\\d{1,8}$"))) {
+                etTelefono.error = "Maximo 8 digitos, sin simbolos."
+                etTelefono.requestFocus()
+                return@setOnClickListener
+            }
+            if (direccion.length < MIN_ADDRESS_LENGTH) {
+                etDireccion.error = "Minimo $MIN_ADDRESS_LENGTH caracteres."
+                etDireccion.requestFocus()
                 return@setOnClickListener
             }
 
@@ -101,5 +127,14 @@ class RegistroActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+
+    private fun isValidName(value: String): Boolean {
+        return value.matches(Regex("^[\\p{L} ]+$"))
+    }
+
+    companion object {
+        private const val MIN_PASSWORD_LENGTH = 8
+        private const val MIN_ADDRESS_LENGTH = 10
     }
 }

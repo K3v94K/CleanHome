@@ -51,8 +51,14 @@
 
     <!-- Dashboard admin (visible cuando hay sesion) -->
     <section id="dashboardView" class="dashboard hidden">
+      <nav class="admin-tabs" aria-label="Secciones administrativas">
+        <button class="tab-btn active" data-view="solicitudes" type="button">Solicitudes</button>
+        <button class="tab-btn" data-view="servicios" type="button">Servicios</button>
+        <button class="tab-btn" data-view="administradores" type="button">Administradores</button>
+      </nav>
+
       <!-- Modulo de gestion de solicitudes -->
-      <article class="card">
+      <article id="solicitudesSection" class="card admin-section">
         <div class="card-head">
           <h2>Solicitudes</h2>
           <button id="reloadSolicitudesBtn" class="btn secondary" type="button">Recargar</button>
@@ -77,7 +83,7 @@
       </article>
 
       <!-- Modulo de gestion de servicios -->
-      <article class="card">
+      <article id="serviciosSection" class="card admin-section hidden">
         <div class="card-head">
           <h2>Servicios</h2>
           <button id="reloadServiciosBtn" class="btn secondary" type="button">Recargar</button>
@@ -123,6 +129,59 @@
               </tr>
             </thead>
             <tbody id="serviciosTableBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <!-- Modulo de gestion de administradores -->
+      <article id="administradoresSection" class="card admin-section hidden">
+        <div class="card-head">
+          <div>
+            <h2>Administradores</h2>
+            <p class="muted tight">Alta de usuarios administrativos. Disponible solo desde el panel web.</p>
+          </div>
+          <button id="reloadAdminsBtn" class="btn secondary" type="button">Recargar</button>
+        </div>
+
+        <form id="adminUserForm" class="form-grid compact">
+          <label>
+            Nombre
+            <input id="adminNombreInput" type="text" required>
+          </label>
+          <label>
+            Correo
+            <input id="adminCorreoInput" type="email" required>
+          </label>
+          <label>
+            Telefono
+            <input id="adminTelefonoInput" type="tel">
+          </label>
+          <label>
+            Contrasena
+            <input id="adminPasswordInput" type="password" required>
+          </label>
+          <label class="full">
+            Direccion
+            <input id="adminDireccionInput" type="text">
+          </label>
+          <div class="form-actions full">
+            <button class="btn primary" type="submit">Crear Administrador</button>
+            <button id="clearAdminUserBtn" class="btn ghost" type="button">Limpiar</button>
+          </div>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+                <th>Creado</th>
+              </tr>
+            </thead>
+            <tbody id="adminsTableBody"></tbody>
           </table>
         </div>
       </article>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.CreateSolicitudRequest
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.Servicio
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.Solicitud
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.Usuario
@@ -200,6 +201,60 @@ class CleanHomeDbHelper(context: Context) :
                 while (rows.moveToNext()) add(rows.toSolicitud())
             }
         }
+    }
+
+    fun getSolicitudesPendientesSync(idUsuario: Int): List<CreateSolicitudRequest> {
+        val cursor = readableDatabase.query(
+            "solicitudes",
+            arrayOf("client_temp_id", "id_servicio", "fecha_servicio", "hora_servicio", "direccion_atencion"),
+            "id_usuario = ? AND sync_status = ? AND client_temp_id IS NOT NULL",
+            arrayOf(idUsuario.toString(), "pending"),
+            null,
+            null,
+            "local_created_at ASC"
+        )
+        return cursor.use { rows ->
+            buildList {
+                while (rows.moveToNext()) {
+                    add(
+                        CreateSolicitudRequest(
+                            id_servicio = rows.getInt(rows.column("id_servicio")),
+                            fecha_servicio = rows.getString(rows.column("fecha_servicio")),
+                            hora_servicio = rows.getString(rows.column("hora_servicio")),
+                            direccion_atencion = rows.getString(rows.column("direccion_atencion")),
+                            client_temp_id = rows.getString(rows.column("client_temp_id"))
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun markSolicitudSynced(clientTempId: String, idSolicitud: Int) {
+        val db = writableDatabase
+        db.delete("solicitudes", "id_solicitud = ? AND client_temp_id != ?", arrayOf(idSolicitud.toString(), clientTempId))
+        db.update(
+            "solicitudes",
+            ContentValues().apply {
+                put("id_solicitud", idSolicitud)
+                put("sync_status", "synced")
+                putNull("sync_error")
+            },
+            "client_temp_id = ?",
+            arrayOf(clientTempId)
+        )
+    }
+
+    fun markSolicitudSyncError(clientTempId: String, error: String?) {
+        writableDatabase.update(
+            "solicitudes",
+            ContentValues().apply {
+                put("sync_status", "pending")
+                put("sync_error", error)
+            },
+            "client_temp_id = ?",
+            arrayOf(clientTempId)
+        )
     }
 
     fun clearAll() {

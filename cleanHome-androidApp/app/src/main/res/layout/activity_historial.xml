@@ -2,49 +2,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F8F9FA"
+    android:orientation="vertical"
     android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/tv_historial_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="‹"
-            android:textSize="32sp"
-            android:textStyle="bold"
+            android:paddingEnd="16dp"
+            android:text="&lt;"
             android:textColor="#000000"
-            android:paddingEnd="16dp"/>
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Historial"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_historial_recargar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Historial"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:backgroundTint="#E7F3FF"
+            android:text="Recargar"
+            android:textAllCaps="false"
+            android:textColor="#0D6EFD" />
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tus reservas pasadas y próximas."
-        android:textColor="#666666"
         android:layout_marginBottom="24dp"
-        android:layout_marginStart="32dp"/>
+        android:layout_marginStart="32dp"
+        android:text="Tus reservas pasadas y proximas."
+        android:textColor="#666666" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_historial_lista"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scrollbars="vertical"
         android:clipToPadding="false"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

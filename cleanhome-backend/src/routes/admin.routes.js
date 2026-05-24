@@ -22,4 +22,8 @@ router.post('/servicios', adminController.createServicio);
 router.put('/servicios/:id', adminController.updateServicio);
 router.delete('/servicios/:id', adminController.deleteServicio);
 
+// Gestion de usuarios administradores.
+router.get('/usuarios/admin', adminController.getAdminUsers);
+router.post('/usuarios/admin', adminController.createAdminUser);
+
 module.exports = router;

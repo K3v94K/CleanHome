@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const pool = require('../config/db');
 
 // Estados permitidos por la regla de negocio.
@@ -184,6 +185,58 @@ const deleteServicio = async (req, res) => {
   }
 };
 
+// Crea usuarios administrativos desde el panel web.
+const createAdminUser = async (req, res) => {
+  try {
+    const { nombre, correo, telefono, direccion, password } = req.body;
+
+    if (!nombre || !correo || !password) {
+      return res.status(400).json({ message: 'Nombre, correo y contrasena son obligatorios.' });
+    }
+
+    const [existingUsers] = await pool.query('SELECT id_usuario FROM usuarios WHERE correo = ?', [correo]);
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ message: 'El correo ya esta registrado.' });
+    }
+
+    const [roles] = await pool.query('SELECT id_rol FROM roles WHERE nombre_rol = ?', ['Admin']);
+    if (roles.length === 0) {
+      return res.status(500).json({ message: 'Rol Admin no encontrado en la base de datos.' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const [result] = await pool.query(
+      `INSERT INTO usuarios (nombre, correo, telefono, direccion, password_hash, id_rol)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [nombre, correo, telefono || null, direccion || null, password_hash, roles[0].id_rol]
+    );
+
+    res.status(201).json({ message: 'Administrador creado correctamente.', id_usuario: result.insertId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al crear el administrador.' });
+  }
+};
+
+// Lista usuarios administrativos para confirmar altas desde el panel web.
+const getAdminUsers = async (req, res) => {
+  try {
+    const [admins] = await pool.query(
+      `SELECT u.id_usuario, u.nombre, u.correo, u.telefono, u.direccion, u.fecha_creacion, u.updated_at
+       FROM usuarios u
+       JOIN roles r ON u.id_rol = r.id_rol
+       WHERE r.nombre_rol = ?
+       ORDER BY u.fecha_creacion DESC`,
+      ['Admin']
+    );
+
+    res.json({ administradores: admins });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener administradores.' });
+  }
+};
+
 module.exports = {
   getAllSolicitudes,
   getPersonalLimpieza,
@@ -193,4 +246,6 @@ module.exports = {
   createServicio,
   updateServicio,
   deleteServicio,
+  createAdminUser,
+  getAdminUsers,
 };

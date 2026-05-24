@@ -109,9 +109,38 @@ h2 {
   color: var(--muted);
 }
 
+.muted.tight {
+  margin: 4px 0 0;
+}
+
 .dashboard {
   display: grid;
   gap: 16px;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.tab-btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.22);
 }
 
 .card-head {

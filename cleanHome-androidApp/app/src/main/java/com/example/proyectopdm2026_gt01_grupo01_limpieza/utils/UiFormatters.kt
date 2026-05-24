@@ -5,8 +5,20 @@ import android.graphics.Color
 object UiFormatters {
     fun formatFechaHora(fecha: String, hora: String): String {
         val fechaCorta = fecha.substringBefore("T").substringBefore(" ")
-        val horaCorta = hora.substringBefore(".").take(5)
-        return "$fechaCorta - $horaCorta"
+        return "$fechaCorta - ${formatHora12(hora)}"
+    }
+
+    private fun formatHora12(hora: String): String {
+        val parts = hora.substringBefore(".").split(":")
+        val hour = parts.getOrNull(0)?.toIntOrNull() ?: return hora
+        val minute = parts.getOrNull(1)?.toIntOrNull() ?: 0
+        val period = if (hour < 12) "AM" else "PM"
+        val displayHour = when {
+            hour == 0 -> 12
+            hour > 12 -> hour - 12
+            else -> hour
+        }
+        return "%02d:%02d %s".format(displayHour, minute, period)
     }
 
     fun estadoColor(estado: String): Int {

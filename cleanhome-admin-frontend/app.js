@@ -14,6 +14,10 @@ const dom = {
   sessionInfo: document.getElementById('sessionInfo'),
   logoutBtn: document.getElementById('logoutBtn'),
   statusLine: document.getElementById('statusLine'),
+  tabButtons: document.querySelectorAll('.tab-btn'),
+  solicitudesSection: document.getElementById('solicitudesSection'),
+  serviciosSection: document.getElementById('serviciosSection'),
+  administradoresSection: document.getElementById('administradoresSection'),
 
   solicitudesBody: document.getElementById('solicitudesTableBody'),
   reloadSolicitudesBtn: document.getElementById('reloadSolicitudesBtn'),
@@ -28,6 +32,16 @@ const dom = {
   servicioPrecioInput: document.getElementById('servicioPrecioInput'),
   servicioActivoInput: document.getElementById('servicioActivoInput'),
   clearServicioBtn: document.getElementById('clearServicioBtn'),
+
+  adminsBody: document.getElementById('adminsTableBody'),
+  reloadAdminsBtn: document.getElementById('reloadAdminsBtn'),
+  adminUserForm: document.getElementById('adminUserForm'),
+  adminNombreInput: document.getElementById('adminNombreInput'),
+  adminCorreoInput: document.getElementById('adminCorreoInput'),
+  adminTelefonoInput: document.getElementById('adminTelefonoInput'),
+  adminPasswordInput: document.getElementById('adminPasswordInput'),
+  adminDireccionInput: document.getElementById('adminDireccionInput'),
+  clearAdminUserBtn: document.getElementById('clearAdminUserBtn'),
 };
 
 // Estado global en memoria del frontend.
@@ -37,6 +51,8 @@ const state = {
   personal: [],
   solicitudes: [],
   servicios: [],
+  administradores: [],
+  activeView: 'solicitudes',
 };
 
 // Muestra mensajes informativos, de exito o error en la barra inferior.
@@ -56,6 +72,17 @@ function toggleView(isLogged) {
   dom.loginView.classList.toggle('hidden', isLogged);
   dom.dashboardView.classList.toggle('hidden', !isLogged);
   dom.logoutBtn.classList.toggle('hidden', !isLogged);
+}
+
+function showAdminView(viewName) {
+  state.activeView = viewName;
+  dom.solicitudesSection.classList.toggle('hidden', viewName !== 'solicitudes');
+  dom.serviciosSection.classList.toggle('hidden', viewName !== 'servicios');
+  dom.administradoresSection.classList.toggle('hidden', viewName !== 'administradores');
+
+  dom.tabButtons.forEach((button) => {
+    button.classList.toggle('active', button.dataset.view === viewName);
+  });
 }
 
 // Elimina "/" final para evitar URLs mal formadas al concatenar rutas.
@@ -187,6 +214,25 @@ function renderServicios() {
     .join('');
 }
 
+function renderAdministradores() {
+  if (!state.administradores.length) {
+    dom.adminsBody.innerHTML = '<tr><td colspan="5">No hay administradores registrados.</td></tr>';
+    return;
+  }
+
+  dom.adminsBody.innerHTML = state.administradores
+    .map(
+      (admin) => `<tr>
+      <td>${admin.id_usuario}</td>
+      <td>${escapeHtml(admin.nombre)}</td>
+      <td>${escapeHtml(admin.correo)}</td>
+      <td>${escapeHtml(admin.telefono || '-')}</td>
+      <td>${formatDate(admin.fecha_creacion)}</td>
+    </tr>`
+    )
+    .join('');
+}
+
 // Carga solicitudes y personal de limpieza para acciones de asignacion.
 async function loadSolicitudes() {
   const solicitudesResp = await apiFetch('/admin/solicitudes');
@@ -210,9 +256,16 @@ async function loadServicios() {
   renderServicios();
 }
 
+async function loadAdministradores() {
+  const adminsResp = await apiFetch('/admin/usuarios/admin');
+  state.administradores = adminsResp.administradores || [];
+  renderAdministradores();
+}
+
 // Carga inicial de datos del dashboard (solicitudes + servicios).
 async function loadDashboard() {
-  await Promise.all([loadSolicitudes(), loadServicios()]);
+  await Promise.all([loadSolicitudes(), loadServicios(), loadAdministradores()]);
+  showAdminView(state.activeView);
 }
 
 // Limpia formulario de servicio para crear uno nuevo.
@@ -223,6 +276,14 @@ function resetServicioForm() {
   dom.servicioDescripcionInput.value = '';
   dom.servicioPrecioInput.value = '';
   dom.servicioActivoInput.checked = true;
+}
+
+function resetAdminUserForm() {
+  dom.adminNombreInput.value = '';
+  dom.adminCorreoInput.value = '';
+  dom.adminTelefonoInput.value = '';
+  dom.adminPasswordInput.value = '';
+  dom.adminDireccionInput.value = '';
 }
 
 // Rellena formulario para editar un servicio existente.
@@ -391,12 +452,44 @@ async function handleServicioSubmit(event) {
   }
 }
 
+async function handleAdminUserSubmit(event) {
+  event.preventDefault();
+
+  try {
+    const payload = {
+      nombre: dom.adminNombreInput.value.trim(),
+      correo: dom.adminCorreoInput.value.trim(),
+      telefono: dom.adminTelefonoInput.value.trim(),
+      direccion: dom.adminDireccionInput.value.trim(),
+      password: dom.adminPasswordInput.value,
+    };
+
+    if (!payload.nombre || !payload.correo || !payload.password) {
+      throw new Error('Nombre, correo y contrasena son obligatorios.');
+    }
+
+    await apiFetch('/admin/usuarios/admin', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    resetAdminUserForm();
+    await loadAdministradores();
+    setStatus('Administrador creado correctamente.', 'ok');
+  } catch (error) {
+    setStatus(error.message, 'error');
+  }
+}
+
 // Punto de entrada del frontend: registra eventos y recupera sesion.
 async function init() {
   dom.baseApiInput.value = state.baseApi;
 
   dom.loginForm.addEventListener('submit', handleLoginSubmit);
   dom.logoutBtn.addEventListener('click', () => signOut());
+  dom.tabButtons.forEach((button) => {
+    button.addEventListener('click', () => showAdminView(button.dataset.view));
+  });
 
   dom.reloadSolicitudesBtn.addEventListener('click', async () => {
     try {
@@ -416,10 +509,21 @@ async function init() {
     }
   });
 
+  dom.reloadAdminsBtn.addEventListener('click', async () => {
+    try {
+      await loadAdministradores();
+      setStatus('Administradores recargados.', 'ok');
+    } catch (error) {
+      setStatus(error.message, 'error');
+    }
+  });
+
   dom.solicitudesBody.addEventListener('click', handleSolicitudesActions);
   dom.serviciosBody.addEventListener('click', handleServiciosActions);
   dom.servicioForm.addEventListener('submit', handleServicioSubmit);
   dom.clearServicioBtn.addEventListener('click', resetServicioForm);
+  dom.adminUserForm.addEventListener('submit', handleAdminUserSubmit);
+  dom.clearAdminUserBtn.addEventListener('click', resetAdminUserForm);
 
   if (!state.token) {
     toggleView(false);

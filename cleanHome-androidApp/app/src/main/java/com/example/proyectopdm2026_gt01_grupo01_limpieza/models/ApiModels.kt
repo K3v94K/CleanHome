@@ -92,6 +92,27 @@ data class SolicitudesResponse(
     val solicitudes: List<Solicitud>
 )
 
+data class SyncSolicitudesRequest(
+    val solicitudes: List<CreateSolicitudRequest>
+)
+
+data class SyncSolicitudResult(
+    val client_temp_id: String,
+    val id_solicitud: Int,
+    val status: String
+)
+
+data class SyncSolicitudError(
+    val index: Int?,
+    val client_temp_id: String?,
+    val message: String?
+)
+
+data class SyncSolicitudesResponse(
+    val sincronizadas: List<SyncSolicitudResult>,
+    val errores: List<SyncSolicitudError>
+)
+
 data class UpdateEstadoRequest(
     val estado: String
 )

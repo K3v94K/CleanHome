@@ -2,6 +2,7 @@ package com.example.proyectopdm2026_gt01_grupo01_limpieza
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.example.proyectopdm2026_gt01_grupo01_limpieza.api.ApiClient
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.data.CleanHomeDbHelper
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.ServiciosResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.session.SessionManager
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.sync.SolicitudesSyncManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +42,11 @@ class CatalogoActivity : AppCompatActivity() {
         }
         rvServicios.adapter = adapter
 
-        loadServicios()
+        findViewById<Button>(R.id.btn_catalogo_recargar).setOnClickListener {
+            syncPendientesAndLoadServicios(showSuccess = true)
+        }
+
+        syncPendientesAndLoadServicios()
 
         findViewById<TextView>(R.id.nav_historial).setOnClickListener {
             startActivity(Intent(this, HistorialActivity::class.java))
@@ -68,5 +74,24 @@ class CatalogoActivity : AppCompatActivity() {
                 Toast.makeText(this@CatalogoActivity, "Usando servicios guardados localmente.", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun syncPendientesAndLoadServicios(showSuccess: Boolean = false) {
+        SolicitudesSyncManager(dbHelper, sessionManager).syncPending { result ->
+            runOnUiThread {
+                if (result.success && result.syncedCount > 0) {
+                    Toast.makeText(
+                        this,
+                        "Solicitudes sincronizadas: ${result.syncedCount}.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!result.success) {
+                    Toast.makeText(this, "Sincronizacion pendiente: ${result.message}", Toast.LENGTH_SHORT).show()
+                } else if (showSuccess) {
+                    Toast.makeText(this, "Servicios actualizados.", Toast.LENGTH_SHORT).show()
+                }
+                loadServicios()
+            }
+        }
     }
 }

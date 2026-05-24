@@ -26,6 +26,7 @@ class AgendarActivity : AppCompatActivity() {
     private lateinit var dbHelper: CleanHomeDbHelper
     private lateinit var sessionManager: SessionManager
     private var idServicio: Int = 0
+    private var horaServicioApi: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +61,16 @@ class AgendarActivity : AppCompatActivity() {
 
         btnConfirmar.setOnClickListener {
             val fecha = etFecha.text.toString().trim()
-            val hora = etHora.text.toString().trim()
+            val hora = horaServicioApi
             val direccion = etDireccion.text.toString().trim()
 
             if (idServicio == 0 || fecha.isBlank() || hora.isBlank() || direccion.isBlank()) {
                 Toast.makeText(this, "Completa fecha, hora y dirección.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (direccion.length < MIN_ADDRESS_LENGTH) {
+                etDireccion.error = "Minimo $MIN_ADDRESS_LENGTH caracteres."
+                etDireccion.requestFocus()
                 return@setOnClickListener
             }
 
@@ -160,11 +166,18 @@ class AgendarActivity : AppCompatActivity() {
         TimePickerDialog(
             this,
             { _, hourOfDay, minute ->
-                target.setText(String.format(Locale.US, "%02d:%02d", hourOfDay, minute))
+                horaServicioApi = String.format(Locale.US, "%02d:%02d:00", hourOfDay, minute)
+                val period = if (hourOfDay < 12) "AM" else "PM"
+                val displayHour = when {
+                    hourOfDay == 0 -> 12
+                    hourOfDay > 12 -> hourOfDay - 12
+                    else -> hourOfDay
+                }
+                target.setText(String.format(Locale.US, "%02d:%02d %s", displayHour, minute, period))
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
-            true
+            false
         ).show()
     }
 
@@ -175,5 +188,6 @@ class AgendarActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_ID_SERVICIO = "extra_id_servicio"
+        private const val MIN_ADDRESS_LENGTH = 10
     }
 }

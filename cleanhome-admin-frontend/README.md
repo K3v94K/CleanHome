@@ -37,6 +37,7 @@ Credenciales por defecto (si BD fue creada con `cleanhome.sql`):
 - Cambio de estado
 - Asignacion de personal
 - CRUD de servicios (crear, editar, desactivar)
+- Creacion y consulta de usuarios administrativos
 - Los servicios creados o editados se reflejan en el catalogo de la app Android al consumir `GET /api/servicios`.
 
 ## Configuracion de API

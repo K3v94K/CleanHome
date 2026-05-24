@@ -1,6 +1,7 @@
 package com.example.proyectopdm2026_gt01_grupo01_limpieza
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.example.proyectopdm2026_gt01_grupo01_limpieza.api.ApiClient
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.data.CleanHomeDbHelper
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.SolicitudesResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.session.SessionManager
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.sync.SolicitudesSyncManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,13 +30,31 @@ class HistorialActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
 
         findViewById<TextView>(R.id.tv_historial_back).setOnClickListener { finish() }
+        findViewById<Button>(R.id.btn_historial_recargar).setOnClickListener {
+            syncPendientesAndLoadSolicitudes(showSuccess = true)
+        }
 
         val rvHistorial = findViewById<RecyclerView>(R.id.rv_historial_lista)
         rvHistorial.layoutManager = LinearLayoutManager(this)
         adapter = HistorialSolicitudesAdapter(dbHelper.getSolicitudesByUsuario(sessionManager.getUserId()))
         rvHistorial.adapter = adapter
 
-        loadSolicitudes()
+        syncPendientesAndLoadSolicitudes()
+    }
+
+    private fun syncPendientesAndLoadSolicitudes(showSuccess: Boolean = false) {
+        SolicitudesSyncManager(dbHelper, sessionManager).syncPending { result ->
+            runOnUiThread {
+                if (result.success && result.syncedCount > 0) {
+                    Toast.makeText(this, "Solicitudes sincronizadas: ${result.syncedCount}.", Toast.LENGTH_SHORT).show()
+                } else if (!result.success) {
+                    Toast.makeText(this, "Mostrando historial local. Sincronizacion pendiente.", Toast.LENGTH_SHORT).show()
+                } else if (showSuccess) {
+                    Toast.makeText(this, "Historial actualizado.", Toast.LENGTH_SHORT).show()
+                }
+                loadSolicitudes()
+            }
+        }
     }
 
     private fun loadSolicitudes() {

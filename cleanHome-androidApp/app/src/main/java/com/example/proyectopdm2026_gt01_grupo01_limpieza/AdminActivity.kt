@@ -1,6 +1,7 @@
 package com.example.proyectopdm2026_gt01_grupo01_limpieza
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.adapters.AdminServiciosAdapter
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.adapters.AdminSolicitudesAdapter
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.api.ApiClient
+import com.example.proyectopdm2026_gt01_grupo01_limpieza.data.CleanHomeDbHelper
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.MessageResponse
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.Servicio
 import com.example.proyectopdm2026_gt01_grupo01_limpieza.models.ServicioRequest
@@ -31,9 +33,11 @@ import retrofit2.Response
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
+    private lateinit var dbHelper: CleanHomeDbHelper
     private lateinit var rvLista: RecyclerView
     private lateinit var btnTabSolicitudes: Button
     private lateinit var btnTabServicios: Button
+    private lateinit var btnLogout: Button
     private lateinit var tvTituloLista: TextView
     private lateinit var fabAddServicio: FloatingActionButton
     private var currentTab = TAB_SOLICITUDES
@@ -43,10 +47,10 @@ class AdminActivity : AppCompatActivity() {
         setContentView(R.layout.activity_admin)
 
         sessionManager = SessionManager(this)
-        findViewById<TextView>(R.id.tv_admin_back).setOnClickListener { handleBackNavigation() }
-
+        dbHelper = CleanHomeDbHelper(this)
         btnTabSolicitudes = findViewById(R.id.btn_tab_solicitudes)
         btnTabServicios = findViewById(R.id.btn_tab_servicios)
+        btnLogout = findViewById(R.id.btn_admin_logout)
         tvTituloLista = findViewById(R.id.tv_admin_titulo_lista)
         rvLista = findViewById(R.id.rv_admin_lista)
         fabAddServicio = findViewById(R.id.fab_admin_add_servicio)
@@ -54,6 +58,7 @@ class AdminActivity : AppCompatActivity() {
         rvLista.layoutManager = LinearLayoutManager(this)
         btnTabSolicitudes.setOnClickListener { showSolicitudes() }
         btnTabServicios.setOnClickListener { showServicios() }
+        btnLogout.setOnClickListener { confirmSignOut() }
         fabAddServicio.setOnClickListener { showServicioDialog(null) }
 
         showSolicitudes()
@@ -68,8 +73,26 @@ class AdminActivity : AppCompatActivity() {
         if (currentTab == TAB_SERVICES) {
             showSolicitudes()
         } else {
-            finish()
+            confirmSignOut()
         }
+    }
+
+    private fun confirmSignOut() {
+        AlertDialog.Builder(this)
+            .setTitle("Cerrar sesion")
+            .setMessage("Deseas cerrar la sesion administrativa?")
+            .setNegativeButton("Cancelar", null)
+            .setPositiveButton("Cerrar sesion") { _, _ -> signOut() }
+            .show()
+    }
+
+    private fun signOut() {
+        sessionManager.clear()
+        dbHelper.clearAll()
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
     }
 
     private fun showSolicitudes() {
@@ -142,10 +165,10 @@ class AdminActivity : AppCompatActivity() {
         val etNombre = dialogEditText("Nombre", InputType.TYPE_CLASS_TEXT).apply {
             setText(servicio?.nombre.orEmpty())
         }
-        val etDescripcion = dialogEditText("Descripción", InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE).apply {
+        val etDescripcion = dialogEditText("Descripcion", InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE).apply {
             setText(servicio?.descripcion.orEmpty())
         }
-        val etDuracion = dialogEditText("Duración estimada", InputType.TYPE_CLASS_TEXT).apply {
+        val etDuracion = dialogEditText("Duracion estimada", InputType.TYPE_CLASS_TEXT).apply {
             setText(servicio?.duracion_estimada.orEmpty())
         }
         val etPrecio = dialogEditText("Precio", InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL).apply {
@@ -164,8 +187,8 @@ class AdminActivity : AppCompatActivity() {
             .setPositiveButton("Guardar") { _, _ ->
                 val nombre = etNombre.text.toString().trim()
                 val precio = etPrecio.text.toString().trim().toDoubleOrNull()
-                if (nombre.isBlank() || precio == null) {
-                    Toast.makeText(this, "Nombre y precio son obligatorios.", Toast.LENGTH_SHORT).show()
+                if (nombre.isBlank() || precio == null || precio <= 0.0) {
+                    Toast.makeText(this, "Nombre y precio mayor que 0 son obligatorios.", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }
                 saveServicio(
@@ -195,7 +218,7 @@ class AdminActivity : AppCompatActivity() {
     private fun confirmDeleteServicio(servicio: Servicio) {
         AlertDialog.Builder(this)
             .setTitle("Desactivar servicio")
-            .setMessage("¿Deseas desactivar ${servicio.nombre}?")
+            .setMessage("Deseas desactivar ${servicio.nombre}?")
             .setNegativeButton("Cancelar", null)
             .setPositiveButton("Desactivar") { _, _ ->
                 val authHeader = getAuthHeaderOrWarn() ?: return@setPositiveButton
@@ -219,7 +242,7 @@ class AdminActivity : AppCompatActivity() {
                     Toast.makeText(this@AdminActivity, successMessage, Toast.LENGTH_SHORT).show()
                     onSuccess()
                 } else {
-                    Toast.makeText(this@AdminActivity, "No se pudo completar la acción.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AdminActivity, "No se pudo completar la accion.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -232,7 +255,7 @@ class AdminActivity : AppCompatActivity() {
     private fun getAuthHeaderOrWarn(): String? {
         val authHeader = sessionManager.getAuthHeader()
         if (authHeader == null) {
-            Toast.makeText(this, "Inicia sesión como administrador.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Inicia sesion como administrador.", Toast.LENGTH_SHORT).show()
         }
         return authHeader
     }
@@ -243,7 +266,7 @@ class AdminActivity : AppCompatActivity() {
         btnTabSolicitudes.setTextColor(Color.WHITE)
         btnTabServicios.setBackgroundColor(Color.parseColor("#E9ECEF"))
         btnTabServicios.setTextColor(Color.parseColor("#374151"))
-        tvTituloLista.text = "Gestión de Solicitudes"
+        tvTituloLista.text = "Gestion de Solicitudes"
         fabAddServicio.visibility = View.GONE
     }
 
@@ -253,7 +276,7 @@ class AdminActivity : AppCompatActivity() {
         btnTabServicios.setTextColor(Color.WHITE)
         btnTabSolicitudes.setBackgroundColor(Color.parseColor("#E9ECEF"))
         btnTabSolicitudes.setTextColor(Color.parseColor("#374151"))
-        tvTituloLista.text = "Gestión de Servicios"
+        tvTituloLista.text = "Gestion de Servicios"
         fabAddServicio.visibility = View.VISIBLE
     }
 

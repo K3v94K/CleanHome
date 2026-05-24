@@ -115,6 +115,10 @@ WHERE correo = 'admin@cleanhome.com';
 - `POST /api/admin/servicios`
 - `PUT /api/admin/servicios/:id`
 - `DELETE /api/admin/servicios/:id`
+- `GET /api/admin/usuarios/admin`
+- `POST /api/admin/usuarios/admin`
+
+`POST /api/admin/usuarios/admin` crea usuarios con rol `Admin`. Este endpoint debe consumirse desde el frontend web administrativo y requiere JWT de una cuenta administradora.
 
 ## Soporte para SQLite en Android
 
